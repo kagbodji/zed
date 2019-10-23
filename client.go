@@ -127,16 +127,20 @@ func newResponse(r *http.Response) *Response {
 
 // ErrorResponse wraps an error response
 type ErrorResponse struct {
-	Response *http.Response
-	Message  string `json:"error,omitempty"`
+	Response    *http.Response
+	Message     string      `json:"error,omitempty"`
+	Description *string     `json:"description,omitempty"`
+	Details     interface{} `json:"details,omitempty"`
 }
 
 func (r *ErrorResponse) Error() string {
-	return fmt.Sprintf("%v %v: %d %v",
+	return fmt.Sprintf("%v %v: %d %v - %v %+v",
 		r.Response.Request.Method,
 		r.Response.Request.URL,
 		r.Response.StatusCode,
-		r.Message)
+		r.Message,
+		r.Description,
+		r.Details)
 }
 
 // CheckResponse checks if a response is valid
